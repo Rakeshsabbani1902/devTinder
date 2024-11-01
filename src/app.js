@@ -28,6 +28,13 @@ app.get("/admin/deleteUser",(req,res)=>{
 })
 
 
+app.use("/getUserData",()=>{
+    //always handle error using try and catch block 
+    throw new Error("Something went wrong")
+    res.send("user Data sent")
+})
+
+
 // app.use("/user",(req,res,next)=>{
 //     console.log("Handling the Route user 1 !!");
 //     next();
@@ -45,8 +52,13 @@ app.get("/admin/deleteUser",(req,res)=>{
 // }]
 // )
 
-
-
+//always keep error handling using use in the end 
+app.use("/",(err,req,res,next)=>{
+    if(err){
+        //Log your error
+        res.status(500).send("something went wrong ")
+    }
+})
 app.listen(7777,()=>{
     console.log("server is running successfully on 7777")
 });
