@@ -113,11 +113,25 @@ app.delete("/user", async (req,res)=>{
 })
 
 //Update a user from the db 
-app.patch("/user", async (req,res)=>{
+app.patch("/user/:userId", async (req,res)=>{
      const data  = req.body;
-     const userId = req.body._id;
+     //API Level validation
+     const userId = req.params?.userId;
+
+  
      
      try{
+
+        const ALLOWED_UPDATES=["photoUrl","about","gender","age","skills"];
+
+        const isUpdateAllowed = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k))
+        if(!isUpdateAllowed){
+           throw new Error("Update not allowed");
+        }
+        //Data Sanitization -API level validation
+        if(data.skills>5){
+            throw new Error("Skills can not be more than 10")
+        }
          const user = await User.findByIdAndUpdate({_id : userId},data,{
             returnDocument:"after",
             runValidators :true,
