@@ -59,3 +59,126 @@ app.use("/",(err,req,res,next)=>{
         res.status(500).send("something went wrong ")
     }
 })
+
+
+//get user by email 
+app.get("/user", async (req,res)=>{
+    const userEmail = req.body.emailId;
+   const id = req.body._id
+ 
+ 
+ //    //To find the  user by id 
+ 
+ //    try{
+ //     console.log(id);
+ //     const user = await User.findById(id);
+ //     if(!user){
+ //         res.status(404).send("User not found ")
+ //     }
+ //     else{
+ //         res.send(user);
+ //     }
+    
+ //    }
+ 
+ //    catch(err){
+ //         res.status(400).send("Something went wrong");
+ //      }
+    
+    //To find the only one user
+ 
+ //    try{
+ //     const user = await User.findOne({emailId :userEmail});
+ //     if(!user){
+ //         res.status(404).send("User not found ")
+ //     }
+ //     else{
+ //         res.send(user);
+ //     }
+    
+ //    }
+ 
+ //    catch(err){
+ //         res.status(400).send("Something went wrong");
+ //      }
+    
+    
+ 
+ 
+     try{
+     const users = await User.find({emailId :userEmail});
+     if(users.length==0){
+         res.status(404).send("User not found ")
+     }
+     else{
+         res.send(users);
+     }
+    
+    }
+    catch(err){
+      res.status(400).send("Something went wrong");
+    }
+    
+ 
+ 
+ })
+ 
+ //Feed API -GET/feed - get all the users form the database
+ app.get("/feed",async (req,res)=>{
+     try{
+         const users = await User.find({});
+         res.send(users);
+        }
+        catch(err){
+          res.status(400).send("Something went wrong");
+        }
+     
+ })
+ 
+ //Delete a user from the database
+ app.delete("/user", async (req,res)=>{
+     const userId = req.body._id;
+     try{
+        const user = await User.findByIdAndDelete({_id : userId})
+        //const user = await User.findByIdAndDelete(userId)
+         res.send("user deleted successfully")
+        
+     }
+     catch(err){
+       res.status(400).send("Soemthng went wrong")
+     }
+ })
+ 
+ //Update a user from the db 
+ app.patch("/user/:userId", async (req,res)=>{
+      const data  = req.body;
+      //API Level validation
+      const userId = req.params?.userId;
+ 
+   
+      
+      try{
+ 
+         const ALLOWED_UPDATES=["photoUrl","about","gender","age","skills"];
+ 
+         const isUpdateAllowed = Object.keys(data).every((k)=>ALLOWED_UPDATES.includes(k))
+         if(!isUpdateAllowed){
+            throw new Error("Update not allowed");
+         }
+         //Data Sanitization -API level validation
+         if(data.skills>5){
+             throw new Error("Skills can not be more than 10")
+         }
+          const user = await User.findByIdAndUpdate({_id : userId},data,{
+             returnDocument:"after",
+             runValidators :true,
+         });
+          console.log(user);
+          res.send("user updated successfully")
+      }
+      catch(err){
+         res.status(400).send("Update failed " +err.message);
+      }
+ 
+ })
+ 
