@@ -35,7 +35,6 @@ authRouter.post("/signup", async (req,res)=>{
     
 });
 
-
 authRouter.post("/login", async (req,res)=>{ 
     try{
       const {emailId,password}= req.body;
@@ -65,6 +64,15 @@ authRouter.post("/login", async (req,res)=>{
       res.status(400).send("ERROR :" + err.message);
     }
   })
+
+authRouter.post("/logout", async (req,res)=>{
+    //Clean up activities are done for logout in big company website
+    //No authentication is required for logout API because it doesn't matter the user is loggedIn or not .we can call logout anyway;
+    //set the cookie token to null and set the expiry time to now 
+    res.cookie('token',null, {expires : new Date(Date.now())})
+
+    res.send("Logout successfull !!!")
+})
 
 
 

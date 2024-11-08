@@ -9,7 +9,7 @@
 ## profileRouter
 - GET /profile/video
 - PATCH /profile/edit
-- PATCH /profile/password
+- PATCH /profile/password   //Forget password API 
 
 
 ## connectionrequestRouter
