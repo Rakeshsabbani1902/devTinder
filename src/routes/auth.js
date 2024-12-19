@@ -54,7 +54,7 @@ authRouter.post("/login", async (req,res)=>{
         //Add the token to cookie and  send rthe response back to the user
           
           res.cookie("token",token,{ expires: new Date(Date.now() + 900000)});
-          res.send("Login Successfull !!!")
+          res.send(user);
        }
        else{
           throw new Error("Invalid Credentials  ")
@@ -69,7 +69,7 @@ authRouter.post("/logout", async (req,res)=>{
     //Clean up activities are done for logout in big company website
     //No authentication is required for logout API because it doesn't matter the user is loggedIn or not .we can call logout anyway;
     //set the cookie token to null and set the expiry time to now 
-    res.cookie('token',null, {expires : new Date(Date.now())})
+    res.cookie('token',null, {expires : new Date(Date.now()),httpOnly: true,})
 
     res.send("Logout successfull !!!")
 })

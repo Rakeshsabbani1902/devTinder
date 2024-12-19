@@ -6,8 +6,13 @@ const jwt = require("jsonwebtoken");
 const getJWT = require("./models/user")
 const validatePassword = require("./models/user")
 const app = express();
+const cors = require("cors");
 
 //express gives  a middleware whoch converts JSON objects to js object which sever can understand 
+app.use(cors({
+    origin : "http://localhost:5173",
+    credentials: true 
+}));
 app.use(express.json());
 app.use(cookieParser())
 

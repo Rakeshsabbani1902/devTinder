@@ -18,13 +18,24 @@ const validateSignUpData =(req)=>{
 
 };
 
-const   validateEditprofileData =(req)=>{
-     const AllowedFields= ["firstName","lastName","emailId","gender","age","about","skills"];
-     const isEditAllowed = Object.keys(req.body).every(field => AllowedFields.includes(field));
-
-
+const validateEditProfileData = (req) => {
+     const allowedEditFields = [
+       "firstName",
+       "lastName",
+       "emailId",
+       "photoUrl",
+       "gender",
+       "age",
+       "about",
+       "skills",
+     ];
+   
+     const isEditAllowed = Object.keys(req.body).every((field) =>
+       allowedEditFields.includes(field)
+     );
+   
      return isEditAllowed;
-}
+   };
 
 
 const validateNewPassword =(req)=>{
@@ -35,4 +46,4 @@ const validateNewPassword =(req)=>{
      return true ;
 }
 
-module.exports ={validateSignUpData ,  validateEditprofileData ,validateNewPassword};
+module.exports ={validateSignUpData ,  validateEditProfileData ,validateNewPassword};

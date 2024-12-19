@@ -1,7 +1,7 @@
 const express = require("express");
 const profileRouter = express.Router();
 const {userAuth} = require("../middlewares/auth");
-const { validateSignUpData ,validateEditprofileData ,validateNewPassword} = require("../utils/validation");
+const { validateSignUpData ,validateEditProfileData ,validateNewPassword} = require("../utils/validation");
 const bcrypt = require("bcrypt");
 
 profileRouter.get("/profile/view", userAuth, async (req, res) => {
@@ -13,26 +13,25 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
     }
   });
 
-profileRouter.patch("/profile/edit", userAuth , async (req,res)=>{
-       try{
-             if(!validateEditprofileData(req)){
-                throw new Error("Invalid Edit request");
-             };
-             const loggedInuser = req.user;
-             console.log(loggedInuser);
-             Object.keys(req.body).forEach((key) => {
-                  loggedInuser[key]= req.body[key]
-             });
-              
-             console.log(loggedInuser);
-             await loggedInuser.save();
-             //res.send( `${loggedInuser.firstName} , Profile updated successfully`)
-             res.json({ message : `${loggedInuser.firstName} , your Profile updated successfully`, data : loggedInuser})
-
-       }
-       catch(err){
-        res.status(400).send("ERROR: " + err.message);
-       }
+  profileRouter.patch("/profile/edit", userAuth, async (req, res) => {
+    try {
+      if (!validateEditProfileData(req)) {
+        throw new Error("Invalid Edit Request");
+      }
+  
+      const loggedInUser = req.user;
+  
+      Object.keys(req.body).forEach((key) => (loggedInUser[key] = req.body[key]));
+  
+      await loggedInUser.save();
+  
+      res.json({
+        message: `${loggedInUser.firstName}, your profile updated successfuly`,
+        data: loggedInUser,
+      });
+    } catch (err) {
+      res.status(400).send("ERROR : " + err.message);
+    }
   });
 
 
